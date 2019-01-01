@@ -1,0 +1,87 @@
+(ns cluedo.predefined-games
+  (:require [clojure.test :refer [function?]]
+            [ysera.test :refer [is is-not is= error?]]
+            [cluedo.construct :refer [create-state create-move create-player]]))
+
+(def game-one
+  "Predefined game one. Four players. Envelope contains :overste-senap, :rortang and :arbetsrummet"
+  (let [players [(create-player "A" 5)
+                 (create-player "B" 4)
+                 (create-player "C" 4)
+                 (create-player "Me" 5 [:ljusstake :pastor-gron :fru-vit :fru-pafagel :vardagsrummet])]
+
+        moves   [(create-move "A" :fru-vit :ljusstake :hallen "Me")
+                 (create-move "B" :fru-vit :rep :matsalen "C")
+                 (create-move "A" :froken-rod :ljusstake :biblioteket "C")
+                 (create-move "B" :fru-vit :blyror :vardagsrummet "Me")
+                 (create-move "C" :pastor-gron :rep :danssalongen "Me")
+                 (create-move "Me" :fru-vit :dolk :arbetsrummet "A" :dolk)
+                 (create-move "A" :fru-vit :rep :biljardrummet "B")
+                 (create-move "B" :overste-senap :dolk :vintertradgarden "C")
+                 (create-move "C" :fru-vit :rep :koket "Me")
+                 (create-move "Me" :froken-rod :ljusstake :biblioteket "A" :froken-rod)
+                 (create-move "A" :froken-rod :rep :hallen "C")
+                 (create-move "B" :froken-rod :ljusstake :biljardrummet "Me")
+                 (create-move "C" :fru-vit :rep :arbetsrummet "Me")
+                 (create-move "Me" :professor-plommon :blyror :arbetsrummet "B" :blyror)
+                 (create-move "A" :fru-vit :rortang :danssalongen "Me")
+                 (create-move "B" :froken-rod :rortang :danssalongen "A")
+                 (create-move "C" :overste-senap :rep :koket "B")
+                 (create-move "Me" :fru-vit :ljusstake :koket "B" :koket)
+                 (create-move "A" :overste-senap :dolk :vintertradgarden "C")
+                 (create-move "B" :professor-plommon :revolver :biljardrummet "A")
+                 (create-move "Me" :professor-plommon :rep :biljardrummet "B" :biljardrummet)
+                 (create-move "A" :professor-plommon :rortang :vardagsrummet "B")
+                 (create-move "C" :froken-rod :rortang :danssalongen "A")
+                 (create-move "A" :froken-rod :revolver :matsalen "C")
+                 (create-move "B" :overste-senap :blyror :arbetsrummet nil) ; Here it should be possible to infer the murderer, weapon and location
+                 (create-move "C" :froken-rod :rep :vintertradgarden "A")
+                 (create-move "Me" :overste-senap :dolk :hallen "A")
+                 (create-move "A" :overste-senap :dolk :vardagsrummet "Me")
+                 (create-move "B" :professor-plommon :rortang :hallen "A")
+                 (create-move "C" :froken-rod :dolk :vardagsrummet "Me")
+                 (create-move "C" :professor-plommon :rep :matsalen "B")]]
+    (create-state players moves)))
+
+(def game-two
+  "Predefined game Two. Six players. Envelope contains :fru-vit, :dolk and :matsalen"
+  (let [players [(create-player "Me" 3 [:professor-plommon :pastor-gron :danssalongen])
+                 (create-player "A")
+                 (create-player "B")
+                 (create-player "C")
+                 (create-player "D")
+                 (create-player "E")]
+
+        moves   [(create-move "C" :pastor-gron :rortang :vintertradgarden "E")
+                 (create-move "D" :froken-rod :ljusstake :biljardrummet "B")
+                 (create-move "Me" :pastor-gron :ljusstake :biljardrummet "B" :biljardrummet)
+                 (create-move "A" :fru-vit :blyror :matsalen "B")
+                 (create-move "B" :overste-senap :rortang :matsalen "E")
+                 (create-move "C" :fru-pafagel :dolk :biljardrummet "E")
+                 (create-move "D" :overste-senap :rortang :danssalongen "E")
+                 (create-move "E" :pastor-gron :rortang :arbetsrummet "Me")
+                 (create-move "Me" :overste-senap :rortang :danssalongen "A" :overste-senap)
+                 (create-move "A" :professor-plommon :revolver :koket "C")
+                 (create-move "C" :overste-senap :rep :koket "D")
+                 (create-move "D" :pastor-gron :ljusstake :vintertradgarden "Me")
+                 (create-move "E" :fru-pafagel :rortang :koket "D")
+                 (create-move "Me" :fru-pafagel :rortang :vintertradgarden "A" :vintertradgarden)
+                 (create-move "A" :professor-plommon :ljusstake :danssalongen "D")
+                 (create-move "B" :fru-pafagel :blyror :vardagsrummet "C")
+                 (create-move "C" :overste-senap :ljusstake :vardagsrummet "D")
+                 (create-move "D" :overste-senap :rep :hallen "E")
+                 (create-move "E" :overste-senap :ljusstake :danssalongen "Me")
+                 (create-move "Me" :fru-pafagel :rortang :danssalongen "E" :rortang)
+                 (create-move "C" :overste-senap :dolk :vintertradgarden "A")
+                 (create-move "E" :fru-vit :ljusstake :vintertradgarden "A")
+                 (create-move "Me" :fru-pafagel :dolk :koket "D" :koket)
+                 (create-move "B" :froken-rod :rep :vintertradgarden "D")
+                 (create-move "C" :professor-plommon :rep :vardagsrummet "Me")
+                 (create-move "D" :overste-senap :blyror :arbetsrummet "A")
+                 (create-move "E" :fru-vit :ljusstake :vardagsrummet "C")
+                 (create-move "Me" :fru-pafagel :dolk :danssalongen "E" :fru-pafagel)
+                 (create-move "A" :froken-rod :rep :arbetsrummet "B")
+                 (create-move "B" :fru-vit :blyror :matsalen nil)
+                 (create-move "D" :professor-plommon :revolver :danssalongen "Me")
+                 (create-move "A" :overste-senap :dolk :arbetsrummet "C")]]
+    (create-state players moves)))
