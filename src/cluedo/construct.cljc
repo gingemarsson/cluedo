@@ -7,6 +7,7 @@
 
 (defn create-state
   "Creates an state with the given players."
+  ([] (create-state [] []))
   ([players] (create-state players []))
   ([players moves]
    {:players players
@@ -168,3 +169,51 @@
               (> index-of-asker index-of-answerer) (remove (fn [id] (or (list-contains? ids-between-indices id)
                                                                         (= id asker)
                                                                         (= id answerer))) player-ids)))))))
+
+(defn add-player
+  "Add player to state."
+  {:test (fn []
+           (is= (->
+                 (create-state [] [])
+                 (add-player (create-player "A" 6))
+                 (get-player "A")
+                 :num-cards)
+                6))}
+  [state player]
+  (update state :players conj player))
+
+(defn add-move
+  "Add move to state."
+  {:test (fn []
+           (is= (->
+                 (create-state [] [])
+                 (add-move (create-move "A" :froken-rod :blyror :vardagsrummet "B"))
+                 :moves)
+                [(create-move "A" :froken-rod :blyror :vardagsrummet "B")]))}
+  [state move]
+  (update state :moves conj move))
+
+(defn remove-player
+  "Remove player with specified id from state."
+  {:test (fn []
+           (is= (->
+                 (create-state [(create-player "A" 6)] [])
+                 (remove-player "A")
+                 :players)
+                []))}
+  [state id]
+  (let [function (fn [player] (= (:id player) id))]
+    (update state :players (fn [players]
+                             (vec (remove function players))))))
+
+(defn remove-move
+  "Remove last move from state."
+  {:test (fn []
+           (is= (->
+                 (create-state [] [(create-move "A" :froken-rod :blyror :vardagsrummet "B")
+                                   (create-move "B" :froken-rod :blyror :vardagsrummet "C")])
+                 (remove-move)
+                 :moves)
+                [(create-move "A" :froken-rod :blyror :vardagsrummet "B")]))}
+  [state]
+  (update state :moves drop-last))
